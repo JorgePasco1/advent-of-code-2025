@@ -3,23 +3,24 @@ import textwrap
 
 
 class Range(TypedDict):
-    l: int
-    r: int
+    left: int
+    right: int
 
     @classmethod
     def from_str(cls, str_: str):
-        l, r = str_.split("-")
-        return cls(l=int(l), r=int(r))
+        left, right = str_.split("-")
+        return cls(left=int(left), right=int(right))
 
 
 def split_in_n(str_: str, n: int) -> List[List[int]]:
-    return textwrap.wrap(str_, n)
+    chunk_size = len(str_) // n
+    result = textwrap.wrap(str_, chunk_size)
+    return result
 
 
 def is_invalid(num: int) -> bool:
-
     num_str = str(num)
-    if len(set(num_str)) == 1:
+    if len(num_str) >= 2 and len(set(num_str)) == 1:
         return True
     for parts in range(2, len(num_str) // 2 + 1):
         if len(num_str) % parts != 0:
@@ -35,8 +36,8 @@ def main(content: str):
     ranges = [Range.from_str(range) for range in content.split(",")]
     nums = []
     for rg in ranges:
-        print(f"Working on {rg["l"]}-{rg["r"]}")
-        for num in range(rg["l"], rg["r"] + 1):
+        print(f"Working on {rg['left']}-{rg['right']}")
+        for num in range(rg["left"], rg["right"] + 1):
             if is_invalid(num):
                 result += num
                 nums.append(num)
