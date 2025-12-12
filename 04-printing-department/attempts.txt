@@ -1,0 +1,7 @@
+Part 1:
+
+1384 -> CORRECT
+
+Part 2:
+
+8013 -> CORRECT
