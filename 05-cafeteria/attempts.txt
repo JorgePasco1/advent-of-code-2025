@@ -1,0 +1,7 @@
+Part 1:
+
+761 -> CORRECT
+
+Part 2:
+
+345755049374932 -> CORRECT

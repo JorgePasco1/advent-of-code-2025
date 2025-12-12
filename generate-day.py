@@ -64,11 +64,10 @@ def create_day_boilerplate(day: int, title: str):
 
     # Python boilerplate template
     python_template = """def main(content: str):
-    # TODO: Implement solution
     pass
 
 if __name__ == "__main__":
-    with open("./input.txt", "r") as file:
+    with open("./example-input.txt", "r") as file:
         raw_content = file.read()
     main(raw_content.strip())
 """
