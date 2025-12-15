@@ -1,0 +1,7 @@
+Part 1:
+
+1703 -> CORRECT
+
+Part 2:
+
+171692855075500 -> CORRECT
