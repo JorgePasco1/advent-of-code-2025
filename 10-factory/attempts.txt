@@ -1,3 +1,7 @@
 Part 1:
 
 520 -> CORRECT
+
+Part 2:
+
+20626 -> CORRECT

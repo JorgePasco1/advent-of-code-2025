@@ -4,7 +4,6 @@ from collections import Counter
 
 
 LIGHT_ON = "#"
-LIGHT_OFF = "."
 
 
 class Machine(TypedDict):
@@ -12,7 +11,7 @@ class Machine(TypedDict):
     light_diagram: dict[int, int]
     turned_on: set[int]
     wiring_schematics: list[tuple[int]]
-    joltage_requirements: set[int]
+    joltage_requirements: list[int]
 
     @classmethod
     def from_str(cls, string: str):
@@ -31,7 +30,7 @@ class Machine(TypedDict):
         schematics = [
             tuple([int(num) for num in rs[1:-1].split(",")]) for rs in raw_schematics
         ]
-        requirements = eval(raw_jr)
+        requirements = eval(raw_jr.replace("{", "[").replace("}", "]"))
         return cls(
             light_diagram=diagram,
             turned_on=turned_on,
