@@ -44,39 +44,27 @@ def solve(machine: Machine) -> int:
 
     n = len(targets)
 
-    buttons = []
+    buttons = machine["wiring_schematics"]
     affects_slot = [
         [] for _ in range(n)
     ]  # affects_slot[s] = list of button indices that increment slot s
 
-    for i, b in enumerate(machine["wiring_schematics"]):
-        slots = tuple(sorted({int(s) for s in b}))  # unique + sorted
-        buttons.append(slots)
-        for s in slots:
-            affects_slot[s].append(i)
-
-    m = len(buttons)
-    if m == 0:
-        return 0 if all(t == 0 for t in targets) else -1
-
-    # Quick infeasibility: slot needs >0 but no button affects it
-    for s in range(n):
-        if targets[s] > 0 and not affects_slot[s]:
-            return -1
+    for idx, schematic in enumerate(machine["wiring_schematics"]):
+        slots_it_affects = tuple(sorted({int(s) for s in schematic}))  # unique + sorted
+        for slot in slots_it_affects:
+            affects_slot[slot].append(idx)
+    print("buttons", buttons)
+    print("affects_slot", affects_slot)
 
     # --- CP-SAT model: minimize sum(x[i]) subject to Ax = targets ---
     model = cp_model.CpModel()
 
     x = []
-    for i, slots in enumerate(buttons):
-        if not slots:
-            # button affects nothing; never useful
-            x.append(model.NewIntVar(0, 0, f"x_{i}"))
-            continue
-
+    for idx, slots in enumerate(buttons):
         # Tight upper bound: cannot exceed smallest target among affected slots (exact equality constraints)
+        print("slots", slots)
         ub = min(targets[s] for s in slots)
-        x.append(model.NewIntVar(0, ub, f"x_{i}"))
+        x.append(model.NewIntVar(0, ub, f"x_{idx}"))
 
     # Constraints per slot
     for s in range(n):
@@ -87,6 +75,7 @@ def solve(machine: Machine) -> int:
 
     solver = cp_model.CpSolver()
     solver.Solve(model)
+    print("================================")
 
     return int(solver.ObjectiveValue())
 
